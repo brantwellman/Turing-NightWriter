@@ -18,15 +18,6 @@ class NightWriter
 
   def write(print_string)
     @output_file.write(print_string)
-    # output_print = []
-    # str_length = @outputs[0].length
-    # iterations = str_length/80 + 1
-    # remainders = str_length % 80
-    # iterations.times do |n|
-    #   @outputs.each do |output|
-    #     @output_file.write(output[80*n..79+80*n] + "\n")
-    #   end
-    # end
   end
 
   def strip_new_line_characters(input)
@@ -67,13 +58,10 @@ class NightWriter
         add_non_cap_character_to_ouput(char)
       end
     end
-    # @outputs
     convert_output_array_to_one_string(@outputs)
   end
 
   def convert_output_array_to_one_string(outputs)
-    # outputs.join("\n") + "\n"
-
     until outputs[0] == "" do
       outputs.each do |output|
         @print_string << output.slice!(0..79) + "\n"
@@ -82,31 +70,6 @@ class NightWriter
     @print_string
   end
 
-  # iterate through each string in outputs
-  #   take first 80 characters and add a \n character to the end
-  # =>add this character to new output string
-      # continue through each string
-      # until each string is empty
-
-
-
-# split output strings into lengths of 80
-# Tests!
-
- # def encode_file_to_braille
- #   # I wouldn't worry about testing this method
- #   # unless you get everything else done
- #   plain = reader.read
- #   braille = encode_to_braille(plain)
- # end
-
 end
 
 writer = NightWriter.new(ARGV[0], ARGV[1])
-# writer.create_output_file_from_input_file(ARGV[0], ARGV[1])
-# p writer.count_characters_in_file ARGV[0]
-# p writer.encode_to_braille("Nn\n!")
-# puts @outputs
-# writer.print_in_three_lines
-# p writer.capital_letter?("!")
-# writer.add_character_to_ouput_string1("n", "")
