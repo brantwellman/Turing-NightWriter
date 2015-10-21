@@ -72,7 +72,7 @@ EOF
   end
 
   def test_it_returns_a_braille_encoded_string
-    skip
     writer = NightWriter.new
+    assert_equal "...00..0.0...0.0....0.0.0.00..\n..00000.0...0.0.....00..00.000\n.00.....0.....0....0....0...0.\n", writer.encode_to_braille("This is Hard!")
   end
 end
