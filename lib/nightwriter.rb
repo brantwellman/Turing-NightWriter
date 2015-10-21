@@ -1,5 +1,5 @@
 require 'pry'
-require './alphabet2.rb'
+require './alphabet_eng_to_braille.rb'
 
 class FileReader
   def read
@@ -14,6 +14,10 @@ class NightWriter
   def initialize
    @reader = FileReader.new
    @input = ""
+   @out_str1 = ""
+   @out_str2 = ""
+   @out_str3 = ""
+   @outputs = ["", "", ""]
   end
 
  # def read_file
@@ -33,30 +37,57 @@ class NightWriter
     total_characters = lines.join.size
   end
 
-  def encode_to_braille(test)
-    output_string = ''
-    test.each_char do |char|
+  def encode_to_braille(input)
+    input.each_char do |char|
       if capital_letter?(char)
-        add_cap_letter_shift_and_cap(char, output_string)
+        add_cap_letter_shift_and_cap(char)
       else
-        output_string << ALPHABET.fetch(char)
+        # binding.pry
+        @outputs[0] = @outputs[0] + add_character_to_ouput_string1(char, @out_str1)
+        @outputs[1] = @outputs[1] + add_character_to_ouput_string2(char, @out_str2)
+        @outputs[2] = @outputs[2] + add_character_to_ouput_string3(char, @out_str3)
+        # output_string << ALPHABET.fetch(char)
       end
     end
-    output_string
+    @outputs
   end
 
-  def add_character_to_ouput_strings(char)
+  # def add_character_to_ouput_string(char, strin_arr)
+  #   strin_arr.each do |str, index|
+  #     index1 = 0 + 2
+  #     index2 = 1
+  #     str << ALPHABET.fetch(char)[index1..index2]
+  #   end
+  # end
 
+
+  def add_character_to_ouput_string1(char, out_str1)
+    @out_str1 << ALPHABET.fetch(char)[0..1]
   end
 
-  def add_cap_letter_shift_and_cap(char, output_string)
-    output_string << ALPHABET.fetch("cap")
-    output_string << char.downcase
+  def add_character_to_ouput_string2(char, out_str2)
+    @out_str2 << ALPHABET.fetch(char)[2..3]
+  end
+
+  def add_character_to_ouput_string3(char, out_str3)
+    @out_str3 << ALPHABET.fetch(char)[4..5]
+  end
+
+  def add_cap_letter_shift_and_cap(char)
+    @out_str1 << ALPHABET.fetch("cap")[0..1]
+    @out_str2 << ALPHABET.fetch("cap")[2..3]
+    @out_str3 << ALPHABET.fetch("cap")[4..5]
+    @out_str1 << ALPHABET.fetch(char.downcase)[0..1]
+    @out_str2 << ALPHABET.fetch(char.downcase)[2..3]
+    @out_str3 << ALPHABET.fetch(char.downcase)[4..5]
+    # output_string << ALPHABET.fetch("cap")
+    # output_string << char.downcase
   end
 
   def capital_letter?(char)
     "A" <= char && char <= "Z"
   end
+
  # def encode_file_to_braille
  #   # I wouldn't worry about testing this method
  #   # unless you get everything else done
@@ -77,5 +108,7 @@ end
 writer = NightWriter.new
 # writer.create_output_file_from_input_file(ARGV[0], ARGV[1])
 # p writer.count_characters_in_file ARGV[0]
-p writer.encode_to_braille("\nEesty-testy!")
+p writer.encode_to_braille("nn")
+puts @outputs
 # p writer.capital_letter?("!")
+# writer.add_character_to_ouput_string1("n", "")
