@@ -1,5 +1,5 @@
 require 'pry'
-require './alphabet_eng_to_braille.rb'
+require './lib/alphabet_eng_to_braille.rb'
 
 class NightWriter
   attr_reader :file_reader, :input

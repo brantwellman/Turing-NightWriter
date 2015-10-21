@@ -1,6 +1,6 @@
 require 'minitest'
 require 'minitest/autorun'
-require_relative '../lib/nightwriter'
+require './lib/nightwriter'
 
 class NightWriterTest < Minitest::Test
   def test_that_it_exists
