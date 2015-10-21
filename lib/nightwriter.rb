@@ -37,28 +37,6 @@ class NightWriter
     total_characters = lines.join.size
   end
 
-  def encode_to_braille(input)
-    input.each_char do |char|
-      if capital_letter?(char)
-        add_cap_letter_shift_and_cap(char)
-      else
-        # binding.pry
-        @outputs[0] = @outputs[0] + add_character_to_ouput_string1(char, @out_str1)
-        @outputs[1] = @outputs[1] + add_character_to_ouput_string2(char, @out_str2)
-        @outputs[2] = @outputs[2] + add_character_to_ouput_string3(char, @out_str3)
-        # output_string << ALPHABET.fetch(char)
-      end
-    end
-    @outputs
-  end
-
-  # def add_character_to_ouput_string(char, strin_arr)
-  #   strin_arr.each do |str, index|
-  #     index1 = 0 + 2
-  #     index2 = 1
-  #     str << ALPHABET.fetch(char)[index1..index2]
-  #   end
-  # end
 
 
   def add_character_to_ouput_string1(char, out_str1)
@@ -74,18 +52,35 @@ class NightWriter
   end
 
   def add_cap_letter_shift_and_cap(char)
-    @out_str1 << ALPHABET.fetch("cap")[0..1]
-    @out_str2 << ALPHABET.fetch("cap")[2..3]
-    @out_str3 << ALPHABET.fetch("cap")[4..5]
-    @out_str1 << ALPHABET.fetch(char.downcase)[0..1]
-    @out_str2 << ALPHABET.fetch(char.downcase)[2..3]
-    @out_str3 << ALPHABET.fetch(char.downcase)[4..5]
-    # output_string << ALPHABET.fetch("cap")
-    # output_string << char.downcase
+    @outputs[0] = @outputs[0] + (ALPHABET.fetch("cap")[0..1])
+    @outputs[1] = @outputs[1] + (ALPHABET.fetch("cap")[2..3])
+    @outputs[2] = @outputs[2] + (ALPHABET.fetch("cap")[4..5])
+    @outputs[0] = @outputs[0] + (ALPHABET.fetch(char.downcase)[0..1])
+    @outputs[1] = @outputs[1] + (ALPHABET.fetch(char.downcase)[2..3])
+    @outputs[2] = @outputs[2] + (ALPHABET.fetch(char.downcase)[4..5])
+
+    # @out_str2 << ALPHABET.fetch("cap")[2..3]
+    # @out_str3 << ALPHABET.fetch("cap")[4..5]
+    # @out_str1 << ALPHABET.fetch(char.downcase)[0..1]
+    # @out_str2 << ALPHABET.fetch(char.downcase)[2..3]
+    # @out_str3 << ALPHABET.fetch(char.downcase)[4..5]
   end
 
   def capital_letter?(char)
     "A" <= char && char <= "Z"
+  end
+
+  def encode_to_braille(input)
+    input.each_char do |char|
+      if capital_letter?(char)
+        add_cap_letter_shift_and_cap(char)
+      else
+        @outputs[0] = @outputs[0] + add_character_to_ouput_string1(char, @out_str1)
+        @outputs[1] = @outputs[1] + add_character_to_ouput_string2(char, @out_str2)
+        @outputs[2] = @outputs[2] + add_character_to_ouput_string3(char, @out_str3)
+      end
+    end
+    @outputs
   end
 
  # def encode_file_to_braille
@@ -97,18 +92,12 @@ class NightWriter
 
 end
 
-# each_char through input string
-  # compare to hash method - if find matching key, then return values...
-  # create 3 empty strings -
-  # add first array values to string 1
-  # add 2nd array values to string 2
-  # add 3rd array values to string 3
   # when string length gets to 80 handle.flush
 
 writer = NightWriter.new
 # writer.create_output_file_from_input_file(ARGV[0], ARGV[1])
 # p writer.count_characters_in_file ARGV[0]
-p writer.encode_to_braille("nn")
+p writer.encode_to_braille("n")
 puts @outputs
 # p writer.capital_letter?("!")
 # writer.add_character_to_ouput_string1("n", "")
