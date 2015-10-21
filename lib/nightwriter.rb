@@ -11,22 +11,29 @@ end
 class NightWriter
   attr_reader :file_reader, :input
 
-  def initialize
-   @reader = FileReader.new
-   @input = ""
-   @out_str1 = ""
-   @out_str2 = ""
-   @out_str3 = ""
-   @outputs = ["", "", ""]
+  def initialize(input_file_name, output_file_name)
+    @output_file = File.open(output_file_name, "w")
+    @input = File.read(input_file_name)
+    @outputs = ["", "", ""]
+    encode_to_braille(@input)
+    write
   end
 
- # def read_file
- #   text = @reader.read("test.txt")
- # end
+  def write
+    output_print = []
+    str_length = @outputs[0].length
+    iterations = str_length/80 + 1
+    remainders = str_length % 80
+    iterations.times do |n|
+      @outputs.each do |output|
+        @output_file.write(output[80*n..79+80*n] + "\n")
+      end
+    end
+  end
 
   def create_output_file_from_input_file(input_filename, output_filename)
     @input = File.open(input_filename)
-    string = @input.read * 3
+    # string = @input.read * 3
     output = File.open(output_filename, "w")
     output.write(string)
     puts "Created '#{output_filename}' containing #{count_characters_in_file(input_filename)} characters."
@@ -37,18 +44,8 @@ class NightWriter
     total_characters = lines.join.size
   end
 
-
-
-  def add_character_to_ouput_string1(char, out_str1)
-    @out_str1 << ALPHABET.fetch(char)[0..1]
-  end
-
-  def add_character_to_ouput_string2(char, out_str2)
-    @out_str2 << ALPHABET.fetch(char)[2..3]
-  end
-
-  def add_character_to_ouput_string3(char, out_str3)
-    @out_str3 << ALPHABET.fetch(char)[4..5]
+  def capital_letter?(char)
+    "A" <= char && char <= "Z"
   end
 
   def add_cap_letter_shift_and_cap(char)
@@ -58,30 +55,28 @@ class NightWriter
     @outputs[0] = @outputs[0] + (ALPHABET.fetch(char.downcase)[0..1])
     @outputs[1] = @outputs[1] + (ALPHABET.fetch(char.downcase)[2..3])
     @outputs[2] = @outputs[2] + (ALPHABET.fetch(char.downcase)[4..5])
-
-    # @out_str2 << ALPHABET.fetch("cap")[2..3]
-    # @out_str3 << ALPHABET.fetch("cap")[4..5]
-    # @out_str1 << ALPHABET.fetch(char.downcase)[0..1]
-    # @out_str2 << ALPHABET.fetch(char.downcase)[2..3]
-    # @out_str3 << ALPHABET.fetch(char.downcase)[4..5]
   end
 
-  def capital_letter?(char)
-    "A" <= char && char <= "Z"
+  def add_non_cap_character_to_ouput(char)
+    @outputs[0] = @outputs[0] + ALPHABET.fetch(char)[0..1]
+    @outputs[1] = @outputs[1] + ALPHABET.fetch(char)[2..3]
+    @outputs[2] = @outputs[2] + ALPHABET.fetch(char)[4..5]
   end
 
   def encode_to_braille(input)
-    input.each_char do |char|
+    input.gsub("\n", "").each_char do |char|
       if capital_letter?(char)
         add_cap_letter_shift_and_cap(char)
       else
-        @outputs[0] = @outputs[0] + add_character_to_ouput_string1(char, @out_str1)
-        @outputs[1] = @outputs[1] + add_character_to_ouput_string2(char, @out_str2)
-        @outputs[2] = @outputs[2] + add_character_to_ouput_string3(char, @out_str3)
+        add_non_cap_character_to_ouput(char)
       end
     end
     @outputs
   end
+
+# split output strings into lengths of 80
+# create proper output to terminal "Created file X with x characters"
+# Tests!
 
  # def encode_file_to_braille
  #   # I wouldn't worry about testing this method
@@ -92,12 +87,11 @@ class NightWriter
 
 end
 
-  # when string length gets to 80 handle.flush
-
-writer = NightWriter.new
+writer = NightWriter.new(ARGV[0], ARGV[1])
 # writer.create_output_file_from_input_file(ARGV[0], ARGV[1])
 # p writer.count_characters_in_file ARGV[0]
-p writer.encode_to_braille("n")
-puts @outputs
+# p writer.encode_to_braille("Nn\n!")
+# puts @outputs
+# writer.print_in_three_lines
 # p writer.capital_letter?("!")
 # writer.add_character_to_ouput_string1("n", "")
