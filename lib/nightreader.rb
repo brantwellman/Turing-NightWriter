@@ -1,6 +1,7 @@
 require 'pry'
 
 class NightReader
+  attr_accessor :concated_arr
 
   def initialize(input_file_name = nil, output_file_name = nil)
     if input_file_name != nil
@@ -23,7 +24,7 @@ class NightReader
   end
 
   def split_string_at_new_lines(input_string)
-    input_string.split("\n")
+    array = input_string.split("\n")
   end
 
   def concatenate_every_third_string(array)
@@ -39,20 +40,34 @@ class NightReader
     @concated_arr
   end
 
-  # def create_strings_of_letters
-  #   # until @concated_arr[0] == "" do
-  #
-  #     @concated_arr.each do |str|
-  #      str.slice!(0..2)
-  #     end
-  #     first_letter
-  #   # end
-  # end
+  def create_strings_of_letters
+    letter_array = []
+    top = @concated_arr[0]
+    middle = @concated_arr[1]
+    lower = @concated_arr[2]
+    top_pairs = []
+    middle_pairs = []
+    lower_pairs = []
+    top.chars.each_slice(2) do |pair|
+      top_pairs << pair
+    end
+    middle.chars.each_slice(2) do |pair|
+      middle_pairs << pair
+    end
+    lower.chars.each_slice(2) do |pair|
+      lower_pairs << pair
+    end
+    top_pairs.each_with_index do |pair, index|
+      braille_char = pair.join + middle_pairs[index].join + lower_pairs[index].join
+      letter_array[index] = braille_char
+    end
+    letter_array
+  end
 
   def encode_to_english(string)
-    split_string_at_new_lines(string)
+    array = split_string_at_new_lines(string)
     concatenate_every_third_string(array)
-    create_strings_of_letters
+    letter_array = create_strings_of_letters
   end
 
 end
@@ -62,4 +77,6 @@ reader = NightReader.new
 # p reader.split_string_at_new_lines("00.0.000..\n.0..00.0..\n000.......\n")
 # array_test = ["1000000000000000", "2..............", "30000000000000", "4..............", "50000000000000", "6.............."]
 # p reader.concatenate_every_third_string(array_test)
+reader.concated_arr = ["100435", "200055", "300088"]
 # p reader.create_strings_of_letters
+# reader.encode_to_english(".00.....0.....0....0....0...0...0.........0.0...0.......0.0")

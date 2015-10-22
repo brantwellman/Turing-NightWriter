@@ -26,9 +26,10 @@ class NightReaderTest < Minitest::Test
     assert_equal ["1000", "2000", "3000"], reader.concatenate_every_third_string(array)
   end
 
-  # def test_it_creates_arrays_from_the_first_two_elements_of_each_string
-  #   reader = NightReader.new
-  #   array = ["100435", "200055", "300088"]
-  #   assert_equal ["102030", "040000", "355588"], reader.create_strings_of_letters
-  # end
+  def test_it_creates_arrays_from_the_first_two_elements_of_each_string
+    reader = NightReader.new
+    array = ["100435", "200055", "300088"]
+    reader.concated_arr = array
+    assert_equal ["102030", "040000", "355588"],  reader.create_strings_of_letters
+  end
 end
