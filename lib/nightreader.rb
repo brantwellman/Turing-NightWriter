@@ -64,6 +64,10 @@ class NightReader
     letter_array
   end
 
+  def capital_letter?(braille_char)
+    braille_char == ".....0"
+  end
+
   def encode_to_english(string)
     array = split_string_at_new_lines(string)
     concatenate_every_third_string(array)
@@ -78,5 +82,6 @@ reader = NightReader.new
 # array_test = ["1000000000000000", "2..............", "30000000000000", "4..............", "50000000000000", "6.............."]
 # p reader.concatenate_every_third_string(array_test)
 reader.concated_arr = ["100435", "200055", "300088"]
+p reader.capital_letter?(".....0")
 # p reader.create_strings_of_letters
 # reader.encode_to_english(".00.....0.....0....0....0...0...0.........0.0...0.......0.0")
