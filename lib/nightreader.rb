@@ -1,4 +1,5 @@
 require 'pry'
+require './lib/alphabet_eng_to_braille'
 
 class NightReader
   attr_accessor :concated_arr, :print_string
@@ -79,12 +80,13 @@ class NightReader
 
   def build_print_string(letter_array)
     letter_array.each_with_index do |braille_char, index|
-      if braille_char.capital_letter?
+      if capital_letter?(braille_char)
         letter_array.unshift
         add_cap_letter_to_print_string(letter_array[braille_char[index + 1]])
       else
         add_non_cap_character_to_print_string(braille_char)
       end
+      letter_array
     end
 
   end
@@ -108,4 +110,5 @@ reader = NightReader.new
 # reader.concated_arr = ["100435", "200055", "300088"]
 # p reader.capital_letter?(".....0")
 # p reader.create_strings_of_letters
+p reader.build_print_string(["00..00", "00.000", "0..000",])
 # reader.encode_to_english(".00.....0.....0....0....0...0...0.........0.0...0.......0.0")
