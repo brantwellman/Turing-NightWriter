@@ -50,4 +50,38 @@ class NightReaderTest < Minitest::Test
     braille_char = "..000."
     refute reader.capital_letter?(braille_char)
   end
+
+  def test_it_adds_proper_lowercase_letter_from_braille_char_to_print_letter_string
+    reader = NightReader.new
+    braille_char = "0....."
+    braille_char2 = "0.0..."
+    braille_char3 = ".0000."
+    assert_equal "a", reader.add_non_cap_character_to_print_string(braille_char)
+    assert_equal "ab", reader.add_non_cap_character_to_print_string(braille_char2)
+    assert_equal "abt", reader.add_non_cap_character_to_print_string(braille_char3)
+  end
+
+  def test_it_adds_proper_punctuation_from_braille_char_to_print_letter_string
+    reader = NightReader.new
+    braille_char = "..000."
+    braille_char2 = "..0..."
+    assert_equal "!", reader.add_non_cap_character_to_print_string(braille_char)
+    assert_equal "!,", reader.add_non_cap_character_to_print_string(braille_char2)
+  end
+
+  def test_it_adds_proper_cap_letter_from_braille_char_to_print_letter_string
+    reader = NightReader.new
+    letter_array = ["0.....", "0....."]
+    letter_arra2 = ["0.0...", "0.0..."]
+    letter_array3 = [".0000.", ".0000."]
+    assert_equal "A", reader.build_print_string(letter_array)
+    assert_equal "AB", reader.build_print_string(letter_array2)
+    assert_equal "ABT", reader.build_print_string(letter_array3)
+  end
+
+  def test_it_removes_braille_shift_character_from_letter_array_does_not_add_character_to_print_string
+    reader = NightReader.new
+    letter_array = [".....0", "0....."]
+    assert_equal "", reader.add_cap_letter_to_print_string(letter_array)
+  end
 end
